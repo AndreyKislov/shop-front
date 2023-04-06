@@ -3,32 +3,32 @@ package ua.kislov.shop_front.security.details;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ua.kislov.shop_front.models.ShopClient;
+import ua.kislov.shop_front.models.SecurityShopClient;
 
 import java.util.Collection;
 import java.util.Collections;
 
 public class ClientDetails implements UserDetails {
 
-    private final ShopClient shopClient;
+    private final SecurityShopClient securityShopClient;
 
-    public ClientDetails(ShopClient shopClient) {
-        this.shopClient = shopClient;
+    public ClientDetails(SecurityShopClient securityShopClient) {
+        this.securityShopClient = securityShopClient;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.shopClient.getRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.securityShopClient.getRole()));
     }
 
     @Override
     public String getPassword() {
-        return this.shopClient.getPassword();
+        return this.securityShopClient.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.shopClient.getUsername();
+        return this.securityShopClient.getUsername();
     }
 
     @Override

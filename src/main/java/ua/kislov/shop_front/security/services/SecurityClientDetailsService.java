@@ -2,12 +2,13 @@ package ua.kislov.shop_front.security.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ua.kislov.shop_front.dto.ShopClientDTO;
-import ua.kislov.shop_front.models.ShopClient;
+import ua.kislov.shop_front.dto.SecurityShopClientDTO;
+import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.security.details.ClientDetails;
 import ua.kislov.shop_front.security.repositories.SecurityFeignClient;
 
@@ -28,12 +29,13 @@ public class SecurityClientDetailsService implements UserDetailsService {
         //получаем по username со стороннего сервиса (аутентификация и регистрация),
         // если юзера не существует то будет выброшено UsernameNotFoundException и
         // обработается далее по цепочке в AuthProvider в методе authenticate(Authentication authentication)
-        ShopClientDTO dto = securityFeignClient.findByUsername(username);
+        ResponseEntity<SecurityShopClientDTO> responseEntity = securityFeignClient.findByUsername(username);
+        SecurityShopClientDTO dto = responseEntity.getBody();
         return new ClientDetails(convertToShopClient(dto));
     }
 
-    private ShopClient convertToShopClient(ShopClientDTO dto) {
-        return mapper.map(dto, ShopClient.class);
+    private SecurityShopClient convertToShopClient(SecurityShopClientDTO dto) {
+        return mapper.map(dto, SecurityShopClient.class);
     }
 
 }

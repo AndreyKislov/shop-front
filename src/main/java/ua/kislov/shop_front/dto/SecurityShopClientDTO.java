@@ -7,10 +7,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ShopClientDTO {
+@AllArgsConstructor
+public class SecurityShopClientDTO {
+    private long id;
     private String username;
     private String password;
     private String role;
+
+    public SecurityShopClientDTO(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
 }

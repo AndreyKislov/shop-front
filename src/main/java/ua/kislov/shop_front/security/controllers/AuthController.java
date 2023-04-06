@@ -7,11 +7,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.kislov.shop_front.models.ShopClient;
+import org.springframework.web.bind.annotation.RequestMapping;
+import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.security.services.RegistrationService;
 import ua.kislov.shop_front.security.validators.RegistrationValidator;
+import ua.kislov.shop_front.services.ShopService;
 
 @Controller
+@RequestMapping("/auth")
 public class AuthController {
 
     private final RegistrationService service;
@@ -27,18 +30,19 @@ public class AuthController {
     public String getAuthForm(){
         return "auth/login";
     }
+
     @GetMapping("/registration")
-    public String getRegForm(@ModelAttribute("securityPerson") ShopClient shopClient){
+    public String getRegForm(@ModelAttribute("securityPerson") SecurityShopClient securityShopClient){
         return "auth/registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("securityPerson")@Valid ShopClient shopClient,
+    public String registration(@ModelAttribute("securityPerson")@Valid SecurityShopClient securityShopClient,
                                BindingResult bindingResult){
-        validator.validate(shopClient, bindingResult);
+        validator.validate(securityShopClient, bindingResult);
         if(bindingResult.hasErrors())
             return "auth/registration";
-        service.save(shopClient);
-        return "redirect:/auth/login";
+        service.save(securityShopClient);
+        return "redirect:/shop/additionalInformation";
     }
 }

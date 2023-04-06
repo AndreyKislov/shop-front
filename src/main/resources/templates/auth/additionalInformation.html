@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/additionalInformation}" th:object="${shopClient}">
+    <label for="clientName">clientName</label>
+    <input type="text" th:field="*{clientName}" id="clientName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}"></div>
+    <br>
+    <label for="surname">surname</label>
+    <input type="text" th:field="*{surname}" id="surname"/>
+    <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+    <br>
+    <label for="email">email</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    <br>
+    <label for="number">number</label>
+    <input type="text" th:field="*{number}" id="number" value="+380"/>
+    <div style="color: red" th:if="${#fields.hasErrors('number')}" th:errors="*{number}"></div>
+    <br>
+    <input type="submit" value="registration">
+</form>
+</body>
+</html>

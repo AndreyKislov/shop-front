@@ -2,24 +2,26 @@ package ua.kislov.shop_front.security.repositories;
 
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.kislov.shop_front.config.FeignClientConfigForAuthAndReg;
-import ua.kislov.shop_front.dto.ShopClientDTO;
-import ua.kislov.shop_front.models.ShopClient;
-
-import java.net.http.HttpResponse;
+import org.springframework.web.bind.annotation.RequestMapping;
+import ua.kislov.shop_front.config.feign_config.FeignConfigForAuth;
+import ua.kislov.shop_front.dto.SecurityShopClientDTO;
+import ua.kislov.shop_front.models.SecurityShopClient;
 
 @FeignClient(
         name = "auth-reg-service",
         url = "${auth-reg-service.url}",
-        configuration = FeignClientConfigForAuthAndReg.class)
+        configuration = FeignConfigForAuth.class)
+@RequestMapping("/auth")
 public interface SecurityFeignClient {
     @GetMapping("/exists-client")
-    Boolean existsByUsername(String username);
-    @GetMapping("/client")
-    ShopClientDTO findByUsername(String username);
+    ResponseEntity<String> existsByUsername(String username);
 
-    @PostMapping("/client")
-    HttpResponse<Void> save(ShopClient shopClient);
+    @GetMapping("/security-client")
+    ResponseEntity<SecurityShopClientDTO> findByUsername(String username);
+
+    @PostMapping("/security-client")
+    ResponseEntity<SecurityShopClientDTO> save(SecurityShopClient securityShopClient);
 }

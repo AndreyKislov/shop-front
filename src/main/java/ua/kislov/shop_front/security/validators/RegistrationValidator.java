@@ -1,11 +1,14 @@
 package ua.kislov.shop_front.security.validators;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ua.kislov.shop_front.models.ShopClient;
+import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.security.services.RegistrationService;
+
+import java.util.logging.Logger;
 
 @Component
 public class RegistrationValidator implements Validator {
@@ -19,15 +22,19 @@ public class RegistrationValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return ShopClient.class.equals(clazz);
+        return SecurityShopClient.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        ShopClient shopClient = (ShopClient) target;
-        if (registrationService.existsByUsername(shopClient.getPassword())) {
-            errors.rejectValue("username", "", "Username is already exists");
+        SecurityShopClient securityShopClient = (SecurityShopClient) target;
+        try {
+            if (registrationService.existsByUsername(securityShopClient.getPassword())) {
+                errors.rejectValue("username", "", "Username is already exists");
+            }
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            errors.rejectValue("username", "", "Sorry! Server exception. You can try later");
         }
-
     }
 }

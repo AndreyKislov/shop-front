@@ -18,15 +18,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("")
+                        .requestMatchers("/shop/deleteP")
                         .hasRole("ADMIN")
-                        .requestMatchers("/auth/login", "/error", "/auth/registration", "")
+                        .requestMatchers("/auth/login", "/error", "/auth/registration")
                         .permitAll()
                         .anyRequest().hasAnyRole("USER", "ADMIN")
                 ).formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/people", true)
+                        .defaultSuccessUrl("/shop/catalog", true)
                         .failureUrl("/auth/login?error")
                 ).logout(logout -> logout
                         .logoutUrl("/logout")
