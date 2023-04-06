@@ -15,7 +15,7 @@
     <br>
     <input type="submit" value="login">
     <div th:if="${param.error}" style="color: red">
-        Incorrect login or password
+        <a th:text="${errorMessage}"></a>
     </div>
 </form>
 <form method="get" th:action="@{registration}" name="r">

@@ -3,11 +3,9 @@ package ua.kislov.shop_front.security.controllers;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.security.services.RegistrationService;
 import ua.kislov.shop_front.security.validators.RegistrationValidator;
@@ -27,7 +25,10 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String getAuthForm(){
+    public String login(@RequestParam(name = "message", required = false) String message, Model model) {
+        if (message != null) {
+            model.addAttribute("errorMessage", message);
+        }
         return "auth/login";
     }
 
