@@ -3,13 +3,17 @@ package ua.kislov.shop_front.security.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ua.kislov.shop_front.security.exeption_hendler.CustomAuthenticationFailureHandler;
+import ua.kislov.shop_front.security.exeption_handler.CustomAuthenticationFailureHandler;
+
+import java.util.Collections;
 
 @Configuration
 @EnableMethodSecurity
@@ -17,10 +21,12 @@ import ua.kislov.shop_front.security.exeption_hendler.CustomAuthenticationFailur
 public class SecurityConfig {
 
     private final CustomAuthenticationFailureHandler handler;
+    private final AuthProvider authProvider;
 
     @Autowired
-    public SecurityConfig(CustomAuthenticationFailureHandler handler) {
+    public SecurityConfig(CustomAuthenticationFailureHandler handler, AuthProvider authProvider) {
         this.handler = handler;
+        this.authProvider = authProvider;
     }
 
     @Bean
@@ -35,16 +41,15 @@ public class SecurityConfig {
                 ).formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/shop/catalog", true)
+                        .defaultSuccessUrl("/shop/checkPage", true)
                         .failureHandler(handler)
                 ).logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/auth/login")
                 ).build();
     }
-
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(Collections.singletonList(authProvider));
     }
 }

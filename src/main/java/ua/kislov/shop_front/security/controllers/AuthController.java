@@ -1,5 +1,6 @@
 package ua.kislov.shop_front.security.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.security.services.RegistrationService;
 import ua.kislov.shop_front.security.validators.RegistrationValidator;
-import ua.kislov.shop_front.services.ShopService;
+
 
 @Controller
 @RequestMapping("/auth")
@@ -25,7 +26,8 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam(name = "message", required = false) String message, Model model) {
+    public String login(@RequestParam(name = "message", required = false) String message,
+                        Model model) {
         if (message != null) {
             model.addAttribute("errorMessage", message);
         }
@@ -40,6 +42,8 @@ public class AuthController {
     @PostMapping("/registration")
     public String registration(@ModelAttribute("securityPerson")@Valid SecurityShopClient securityShopClient,
                                BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return "auth/registration";
         validator.validate(securityShopClient, bindingResult);
         if(bindingResult.hasErrors())
             return "auth/registration";

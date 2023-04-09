@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class SecurityShopClient {
@@ -22,4 +21,13 @@ public class SecurityShopClient {
     private String password;
 
     private String role;
+
+    @Override
+    public String toString() {
+        return "SecurityShopClient{" +
+                "clientId=" + clientId +
+                ", username='" + username + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }

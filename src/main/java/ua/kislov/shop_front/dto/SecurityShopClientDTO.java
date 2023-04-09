@@ -1,24 +1,17 @@
 package ua.kislov.shop_front.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class SecurityShopClientDTO {
-    private long id;
+    private long clientId;
     private String username;
     private String password;
     private String role;
 
-    public SecurityShopClientDTO(String username, String password, String role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
 
 }

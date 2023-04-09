@@ -1,4 +1,4 @@
-package ua.kislov.shop_front.security.exeption_hendler;
+package ua.kislov.shop_front.security.exeption_handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         String errorMessage = exception.getMessage();
-
         setDefaultFailureUrl("/auth/login?error&message=" + errorMessage);
         super.onAuthenticationFailure(request, response, exception);
     }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+  <title>Error</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .error-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .error-title {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .error-back-link {
+      margin-top: 2rem;
+    }
+
+    .button input[type="submit"] {
+      padding: 1rem 2rem;
+      background-color: #343a40;
+      color: #fff;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .button input[type="submit"]:hover {
+      background-color: #212529;
+    }
+  </style>
+</head>
+<body>
+<div class="error-page">
+  <div class="error-title">Oops! Something went wrong</div>
+  <div class="error-message"><p th:text="${error}">error</p></div>
+  <div class="error-back-link">
+    <form class="button" th:method="GET" th:action="@{shop/catalog}">
+      <input type="submit" value="Back to catalog">
+    </form>
+  </div>
+</div>
+</body>
+</html>

@@ -28,13 +28,8 @@ public class RegistrationValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         SecurityShopClient securityShopClient = (SecurityShopClient) target;
-        try {
-            if (registrationService.existsByUsername(securityShopClient.getPassword())) {
-                errors.rejectValue("username", "", "Username is already exists");
-            }
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-            errors.rejectValue("username", "", "Sorry! Server exception. You can try later");
+        if (registrationService.existsByUsername(securityShopClient.getUsername())) {
+            errors.rejectValue("username", "", "Username is already exists");
         }
     }
 }

@@ -8,13 +8,7 @@ import ua.kislov.shop_front.models.SecurityShopClient;
 import java.util.Collection;
 import java.util.Collections;
 
-public class ClientDetails implements UserDetails {
-
-    private final SecurityShopClient securityShopClient;
-
-    public ClientDetails(SecurityShopClient securityShopClient) {
-        this.securityShopClient = securityShopClient;
-    }
+public record ClientDetails(SecurityShopClient securityShopClient) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -49,5 +43,12 @@ public class ClientDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ClientDetails{" +
+                "securityShopClient=" + securityShopClient +
+                '}';
     }
 }

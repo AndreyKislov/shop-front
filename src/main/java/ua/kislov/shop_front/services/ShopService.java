@@ -16,6 +16,10 @@ public class ShopService {
         this.shopFeignClient = shopFeignClient;
     }
 
+    public Boolean existsById(long id){
+        return Boolean.parseBoolean(shopFeignClient.existsById(id).getBody());
+    }
+
     public void sendAdditionalInformation(ShopClient shopClient){
         shopFeignClient.createShopCart(shopClient);
     }
