@@ -32,6 +32,7 @@ public class AuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
+
         //получаем по username со стороннего сервиса (аутентификация и регистрация)
         ClientDetails details;
         try {
@@ -40,6 +41,9 @@ public class AuthProvider implements AuthenticationProvider {
             throw new AuthenticationServiceException("Service is not available");
         } catch (FeignException.NotFound e) {
             throw new AuthenticationServiceException("User is not found");
+        }catch (FeignException e){
+            System.out.println(e.fillInStackTrace());
+            throw new AuthenticationServiceException("Some problem");
         }
         String password = authentication.getCredentials().toString();
         if (!encoder.matches(password, details.getPassword()))

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,7 +54,7 @@
     </style>
 </head>
 <body>
-<form th:method="POST" th:action="@{/additionalInformation}" th:object="${shopClient}">
+<form th:method="POST" th:action="@{/shop/additionalInformation}" th:object="${shopClient}">
     <label for="clientName">clientName</label>
     <input type="text" th:field="*{clientName}" id="clientName"/>
     <div style="color:red" th:if="${#fields.hasErrors('clientName')}" th:errors="*{clientName}"></div>

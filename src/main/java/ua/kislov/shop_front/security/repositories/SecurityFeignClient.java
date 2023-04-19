@@ -9,7 +9,7 @@ import ua.kislov.shop_front.dto.SecurityShopClientDTO;
 import ua.kislov.shop_front.models.SecurityShopClient;
 
 @FeignClient(
-        name = "auth-reg-service",
+        name = "auth-reg-service-security",
         url = "${auth-reg-service.url}",
         configuration = FeignConfig.class)
 public interface SecurityFeignClient {

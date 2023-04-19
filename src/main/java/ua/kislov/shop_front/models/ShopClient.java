@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShopClient {
+    private long id;
     @NotEmpty(message = "Field can't be empty")
     @Length(min = 2, max = 20, message = "Name should be normal size")
     private String clientName;

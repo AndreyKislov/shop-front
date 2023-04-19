@@ -8,12 +8,12 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.SecurityFilterChain;
 import ua.kislov.shop_front.security.exeption_handler.CustomAuthenticationFailureHandler;
 
 import java.util.Collections;
+import java.util.Set;
 
 @Configuration
 @EnableMethodSecurity
@@ -33,7 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/shop/deleteP")
+                        .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
                         .requestMatchers("/auth/login", "error", "/auth/registration")
                         .permitAll()
@@ -41,7 +41,16 @@ public class SecurityConfig {
                 ).formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/process_login")
-                        .defaultSuccessUrl("/shop/checkPage", true)
+                        //.defaultSuccessUrl("/shop/checkPage", true)
+                        .successHandler((request, response, authentication) -> {
+                            Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+                            System.out.println(roles);
+                            if (roles.contains("ROLE_ADMIN")) {
+                                response.sendRedirect("/admin/users");
+                            } else if (roles.contains("ROLE_USER")) {
+                                response.sendRedirect("/shop/checkPage");
+                            }
+                        })
                         .failureHandler(handler)
                 ).logout(logout -> logout
                         .logoutUrl("/logout")

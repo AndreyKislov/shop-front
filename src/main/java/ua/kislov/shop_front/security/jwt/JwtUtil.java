@@ -34,12 +34,11 @@ public class JwtUtil {
         return JWT
                 .create()
                 .withSubject("User details")
-                .withClaim("id", securityShopClient.getClientId())
                 .withClaim("role", securityShopClient.getRole())
+                .withClaim("user", securityShopClient.getUsername())
                 .withIssuer("Kislov")
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(ZonedDateTime.now().plusSeconds(60).toInstant()))
                 .sign(Algorithm.HMAC256(secretString));
     }
-
 }

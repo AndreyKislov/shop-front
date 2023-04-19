@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
   <title>Error</title>
   <meta charset="utf-8">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     /* Reset default styles */
@@ -62,7 +64,7 @@
   <div class="error-title">Oops! Something went wrong</div>
   <div class="error-message"><p th:text="${error}">error</p></div>
   <div class="error-back-link">
-    <form class="button" th:method="GET" th:action="@{shop/catalog}">
+    <form class="button" th:method="GET" th:action="@{/shop/catalog}">
       <input type="submit" value="Back to catalog">
     </form>
   </div>

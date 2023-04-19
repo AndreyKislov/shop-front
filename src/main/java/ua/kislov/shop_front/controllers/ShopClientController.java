@@ -2,7 +2,7 @@ package ua.kislov.shop_front.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -10,20 +10,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ua.kislov.shop_front.models.SecurityShopClient;
+import ua.kislov.shop_front.config.validators.EmailValidator;
 import ua.kislov.shop_front.models.ShopClient;
 import ua.kislov.shop_front.security.details.ClientDetails;
-import ua.kislov.shop_front.services.ShopService;
+import ua.kislov.shop_front.services.ClientService;
 
 @Controller
 @RequestMapping("/shop")
-@Lazy
-public class ShopController {
-    private final ShopService shopService;
+public class ShopClientController {
+    private final ClientService clientService;
+    private final EmailValidator emailValidator;
 
     @Autowired
-    public ShopController(ShopService shopService) {
-        this.shopService = shopService;
+    public ShopClientController(ClientService clientService, EmailValidator emailValidator) {
+        this.clientService = clientService;
+        this.emailValidator = emailValidator;
     }
 
     @GetMapping("/additionalInformation")
@@ -34,18 +35,26 @@ public class ShopController {
     @PostMapping("/additionalInformation")
     public String createAdditionalInformation(@ModelAttribute("shopClient") @Valid ShopClient shopClient,
                                               BindingResult bindingResult) {
+        System.out.println("from contr");
         if (bindingResult.hasErrors())
             return "auth/additionalInformation";
-        shopService.sendAdditionalInformation(shopClient);
+        emailValidator.validate(shopClient, bindingResult);
+        if (bindingResult.hasErrors())
+            return "auth/additionalInformation";
+        shopClient.setId(getCurrentId());
+        clientService.sendAdditionalInformation(shopClient);
         return "redirect:/catalog";
     }
 
     @GetMapping("/checkPage")
-    public String catalog() {
+    public String check() {
+        if (clientService.existsById(getCurrentId()))
+            return "redirect:/catalog";
+        return "redirect:/shop/additionalInformation";
+    }
+
+    private long getCurrentId(){
         ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        long id = clientDetails.securityShopClient().getClientId();
-        if(shopService.existsById(id))
-            return "redirect:/shop/additionalInformation";
-        return "redirect:/shop/catalog";
+        return clientDetails.securityShopClient().getClientId();
     }
 }

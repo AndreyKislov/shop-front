@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Users</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #dddddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Admin Users</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Role</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td>
+            <a th:href="@{/admin/user/{id} (id=${user.getClientId()})}" th:text="${user.getUsername()}"></a>
+        </td>
+        <td th:text="${user.role}"></td>
+    </tr>
+    </tbody>
+</table>
+<div th:if="${pageNumbers}">
+    <ul style="list-style-type: none; display: inline-block;">
+        <li th:each="pageNum : ${pageNumbers}" style="display: inline-block; margin-right: 5px;">
+            <a th:href="@{/admin/users(page=${pageNum}, size=${size}, sortBy=${sortBy})}"
+               th:class="${pageNum == currentPage} ? active : ''"
+               th:text="${pageNum}"></a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
