@@ -4,14 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import ua.kislov.shop_front.dto.OrderDTO;
-import ua.kislov.shop_front.dto.ProductQuantityDTO;
 import ua.kislov.shop_front.services.ClientService;
 import ua.kislov.shop_front.services.interfaces.OrderInterface;
-
-import java.util.List;
 
 @Controller
 public class OrderController {

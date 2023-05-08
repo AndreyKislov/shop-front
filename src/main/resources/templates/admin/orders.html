@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Добавлены стили для кнопки */
+        .button-cell {
+
+        }
+
+        .button-link {
+            display: block;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Order List</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Client Name</th>
+        <th>Product Count</th>
+        <th>Total price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td class="button-cell">
+            <!-- Добавленная кнопка на всю ячейку таблицы -->
+            <a th:href="@{/admin/order/{orderId}(orderId=${order.orderId})}"
+               class="button-link"
+               th:text="${order.orderId}">
+            </a>
+        </td>
+        <td th:text="${order.shopClient.clientName} + ' ' + ${order.shopClient.surname}"></td>
+        <td th:text="${order.orderProductsList.size()}"></td>
+        <td>
+            <span th:text="${order.getTotalCost() + '$'}"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

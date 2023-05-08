@@ -1,5 +1,6 @@
 package ua.kislov.shop_front.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
@@ -10,11 +11,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+import ua.kislov.shop_front.dto.OrdersDTO;
 import ua.kislov.shop_front.dto.ProductListDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientListDTO;
 import ua.kislov.shop_front.models.Product;
 import ua.kislov.shop_front.models.SecurityShopClient;
+import ua.kislov.shop_front.models.ShopOrder;
 import ua.kislov.shop_front.services.interfaces.AdminServiceInterface;
 import ua.kislov.shop_front.validators.ProductValidate;
 
@@ -42,7 +45,7 @@ public class AdminController {
     @GetMapping("/users")
     public String users(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNumber,
                         @RequestParam(value = "size", required = false,
-                                defaultValue = "3") int size,
+                                defaultValue = "10") int size,
                         @RequestParam(value = "sortBy", required = false,
                                 defaultValue = "username") String sortBy,
                         Model model) {
@@ -128,6 +131,26 @@ public class AdminController {
         product.setUrl(file.getPath());
         adminService.saveNewProduct(product);
         return "redirect:/admin/create_product";
+    }
+
+    @GetMapping("/orders")
+    public String orders(Model model) throws JsonProcessingException {
+        OrdersDTO ordersDTO = adminService.getOrders();
+        model.addAttribute("orders", ordersDTO.getListOrder());
+        return "admin/orders";
+    }
+
+    @GetMapping("/order/{id}")
+    public String order(@PathVariable("id") long id, Model model){
+        ShopOrder shopOrder = adminService.getOrder(id);
+        model.addAttribute("order", shopOrder);
+        return "admin/order";
+    }
+
+    @PatchMapping("/order/{id}")
+    public String order(@PathVariable("id")long id){
+        adminService.completedOrder(id);
+        return "redirect:/admin/orders";
     }
 
 

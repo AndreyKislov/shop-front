@@ -1,10 +1,12 @@
 package ua.kislov.shop_front.config.feign_config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.Contract;
 import feign.RequestInterceptor;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.support.PageJacksonModule;
+import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -18,7 +20,6 @@ public class FeignConfig {
     @Autowired
     public FeignConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-
     }
 
     @Bean

@@ -1,17 +1,20 @@
 package ua.kislov.shop_front.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.kislov.shop_front.dto.OrdersDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientListDTO;
 import ua.kislov.shop_front.dto.ShopClientDTO;
 import ua.kislov.shop_front.models.Product;
 import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.models.ShopClient;
+import ua.kislov.shop_front.models.ShopOrder;
 import ua.kislov.shop_front.repositiries.AdminShopFeign;
 import ua.kislov.shop_front.repositiries.AdminUserFeign;
-import ua.kislov.shop_front.repositiries.ShopFeign;
 import ua.kislov.shop_front.services.interfaces.AdminServiceInterface;
 
 @Service
@@ -19,16 +22,15 @@ public class AdminService implements AdminServiceInterface {
 
     private final AdminUserFeign adminUserFeign;
     private final AdminShopFeign adminShopFeign;
-
-    private final ShopFeign shopFeign;
     private final ModelMapper mapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public AdminService(AdminUserFeign adminUserFeign, AdminShopFeign adminShopFeign, ShopFeign shopFeign, ModelMapper mapper) {
+    public AdminService(AdminUserFeign adminUserFeign, AdminShopFeign adminShopFeign, ModelMapper mapper, ObjectMapper objectMapper) {
         this.adminUserFeign = adminUserFeign;
         this.adminShopFeign = adminShopFeign;
-        this.shopFeign = shopFeign;
         this.mapper = mapper;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -60,6 +62,22 @@ public class AdminService implements AdminServiceInterface {
     @Override
     public void saveNewProduct(Product product) {
         adminShopFeign.saveNewProduct(product);
+    }
+
+    @Override
+    public OrdersDTO getOrders() throws JsonProcessingException {
+        String json = adminShopFeign.getOrders().getBody();
+        return objectMapper.readValue(json, OrdersDTO.class);
+    }
+
+    @Override
+    public ShopOrder getOrder(long id) {
+        return adminShopFeign.getOrder(id).getBody();
+    }
+
+    @Override
+    public void completedOrder(long id) {
+        adminShopFeign.completedOrder(id);
     }
 
     private SecurityShopClient fromDTOForSecurityShopClient(SecurityShopClientDTO dto){

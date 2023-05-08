@@ -4,9 +4,11 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.kislov.shop_front.config.feign_config.FeignConfig;
+import ua.kislov.shop_front.dto.OrdersDTO;
 import ua.kislov.shop_front.dto.ProductListDTO;
 import ua.kislov.shop_front.dto.ShopClientDTO;
 import ua.kislov.shop_front.models.Product;
+import ua.kislov.shop_front.models.ShopOrder;
 
 @FeignClient(
         name = "shop-back-admin",
@@ -26,4 +28,13 @@ public interface AdminShopFeign {
 
     @PostMapping("/admin/new_product")
     ResponseEntity<Void> saveNewProduct(@RequestBody Product product);
+
+    @GetMapping("/admin/orders")
+    ResponseEntity<String> getOrders();
+
+    @GetMapping("/admin/order")
+    ResponseEntity<ShopOrder> getOrder(@RequestParam("id") long id);
+
+    @PostMapping("/admin/order")
+    ResponseEntity<Void> completedOrder(@RequestParam("id") long id);
 }
