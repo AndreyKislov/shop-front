@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cart</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-size: 1.1em;
+            font-family: Arial, sans-serif;
+        }
+
+        th {
+            background-color: #4285f4;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #dddddd;
+        }
+
+        td {
+            background-color: #ffffff;
+            color: #333333;
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #dddddd;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+        .td-form{
+            display: inline-block;
+        }
+        .not-product{
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .not-product-p{
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${cart == null}" class="not-product">
+   <p class="not-product-p">Вы еще не добавили в корзину ни одного товара</p>
+</div>
+<div th:if="${cart != null}">
+    <table>
+        <thead>
+        <tr>
+            <th>name</th>
+            <th>price</th>
+            <th>quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="productDTO : ${cart}">
+            <td th:text="${productDTO.getProduct().getName()}"></td>
+            <td th:text="${productDTO.getProduct().getCost()}"></td>
+            <td>
+               <form class="td-form" th:method="PATCH" th:action="@{/catalog/cart/quantity}">
+                   <label for="quantity"></label>
+                   <input type="number" max="20" min="1" id="quantity" name="quantity" th:value="${productDTO.getQuantity()}"/>
+                   <input type="hidden" id="productId" name="productId" th:value="${productDTO.getProduct().getId()}">
+                   <input type="submit" value="update">
+               </form>
+                <form class="td-form" th:method="DELETE" th:action="@{/catalog/cart/delete}">
+                    <input type="hidden" id="productIdForDelete" name="productIdForDelete" th:value="${productDTO.getProduct().getId()}">
+                    <input type="submit" value="delete">
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<form th:if="${cart != null}" th:method="POST" th:action="@{/order}">
+    <input type="submit" th:value="Заказать">
+</form>
+</body>
+</html>

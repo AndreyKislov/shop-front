@@ -41,20 +41,16 @@ public class ShopClientController {
         emailValidator.validate(shopClient, bindingResult);
         if (bindingResult.hasErrors())
             return "auth/additionalInformation";
-        shopClient.setId(getCurrentId());
+        shopClient.setId(clientService.getCurrentClientId());
         clientService.sendAdditionalInformation(shopClient);
         return "redirect:/catalog";
     }
 
     @GetMapping("/checkPage")
     public String check() {
-        if (clientService.existsById(getCurrentId()))
+        if (clientService.existsById(clientService.getCurrentClientId()))
             return "redirect:/catalog";
         return "redirect:/shop/additionalInformation";
     }
 
-    private long getCurrentId(){
-        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return clientDetails.securityShopClient().getClientId();
-    }
 }

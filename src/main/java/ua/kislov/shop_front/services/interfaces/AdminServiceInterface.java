@@ -1,13 +1,22 @@
 package ua.kislov.shop_front.services.interfaces;
 
-import org.springframework.data.domain.Page;
-import ua.kislov.shop_front.dto.SecurityShopClientDTO;
+import ua.kislov.shop_front.dto.ProductListDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientListDTO;
+import ua.kislov.shop_front.models.Product;
 import ua.kislov.shop_front.models.SecurityShopClient;
-
-import java.util.List;
+import ua.kislov.shop_front.models.ShopClient;
 
 public interface AdminServiceInterface {
-    SecurityShopClientListDTO findByAll(int page, int size, String sort);
-    SecurityShopClient findById(long id);
+    SecurityShopClientListDTO findSecurityShopClientByAll(int page, int size, String sort);
+
+    SecurityShopClient findSecurityShopClientById(long id);
+
+    ShopClient findShopClientById(long id);
+
+    void deleteUserAndClient(long id);
+
+    Boolean productIsExists(String name);
+
+    void saveNewProduct(Product product);
+
 }

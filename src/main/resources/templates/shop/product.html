@@ -1,11 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Product Page</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+        .product {
+            border: 1px solid #ccc;
+            padding: 10px;
+            display: inline-block;
+            background-color: #fff;
+            border-radius: 25px;
+            transition: box-shadow 0.3s ease-in-out;
+            margin: 70px 10px 10px 9%;
+            width: 81%;
+        }
+        .product:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .product img {
+            max-width: 30%;
+            height: auto;
+        }
+        .product h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #444;
+            text-align: center;
+        }
+        .product p {
+            font-size: 1.2em;
+            margin: 0;
+            color: #666;
+            text-align: justify;
+        }
+        .product p.cost {
+            font-weight: bold;
+            font-size: 1.5em;
+            text-align: center;
+            color: #008080;
+            margin-top: 20px;
+        }
+        .add-to-cart-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #008080;
+            color: #fff;
+            border-radius: 25px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .add-to-cart-btn:hover {
+            background-color: #006666;
+        }
+        input{
+            background-color: #008080;
+            color: #F8ECCFFF;
+        }
+    </style>
 </head>
 <body>
-
+<div class="product">
+    <img th:src="@{|${product.getUrl()}|}" alt="Product Image">
+    <h2 th:text="${product.getName()}"></h2>
+    <p th:text="${product.getDescription()}"></p>
+    <p class="cost" th:text="'Price: $' + ${product.getCost()}"></p>
+    <form class="add-to-cart-btn" th:method="POST" th:action="@{/catalog/{id}(id=${product.getId()})}">
+        <input type="submit" value="Add to cart">
+    </form>
+</div>
 </body>
 </html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user</title>
+    <style>
+        body {
+            background-color: #F5F5F5;
+            font-family: Arial, sans-serif;
+            color: #333333;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #212529;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #212529;
+        }
+    </style>
+</head>
+<body>
+<p th:text="${'Username: ' + user.getUsername()}"></p>
+<p th:text="${'id: ' + user.getClientId()}"></p>
+<p th:if="${client != null}" th:text="${'Email: ' + client.getEmail()}"></p>
+<p th:if="${client != null}"  th:text="${'Phone Number: ' + client.getNumber()}"></p>
+<p th:if="${client == null}"  th:text="${'Пользователь не завершил регистрацию'}"></p>
+
+<form th:method="DELETE" th:href="@{/admin/users{id}(id=${user.getClientId()})}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="submit" value="delete">
+</form>
+
+</body>
+</html>

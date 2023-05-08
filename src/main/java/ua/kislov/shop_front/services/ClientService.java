@@ -2,29 +2,43 @@ package ua.kislov.shop_front.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ua.kislov.shop_front.dto.ProductQuantityDTO;
 import ua.kislov.shop_front.models.ShopClient;
-import ua.kislov.shop_front.repositiries.ClientFeign;
+import ua.kislov.shop_front.repositiries.ShopFeign;
+import ua.kislov.shop_front.security.details.ClientDetails;
+
+import java.util.List;
 
 @Service
 @Lazy
 public class ClientService {
-    private final ClientFeign clientFeign;
+    private final ShopFeign shopFeign;
 
     @Autowired
-    public ClientService(ClientFeign clientFeign) {
-        this.clientFeign = clientFeign;
+    public ClientService(ShopFeign shopFeign) {
+        this.shopFeign = shopFeign;
     }
 
     public Boolean existsById(long id){
-        return clientFeign.existsById(id).getBody();
+        return shopFeign.existsById(id).getBody();
     }
 
     public Boolean existsByEmail(String email){
-        return clientFeign.existsByEmail(email).getBody();
+        return shopFeign.existsByEmail(email).getBody();
     }
 
     public void sendAdditionalInformation(ShopClient shopClient){
-        clientFeign.createShopCart(shopClient);
+        shopFeign.createShopCart(shopClient);
+    }
+
+    public List<ProductQuantityDTO> findCartById(long id){
+        return shopFeign.getShopCart(id).getBody();
+    }
+
+    public long getCurrentClientId(){
+        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return clientDetails.securityShopClient().getClientId();
     }
 }

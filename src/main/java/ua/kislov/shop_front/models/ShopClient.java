@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,4 +28,5 @@ public class ShopClient {
     private String email;
     @Pattern(regexp = "^\\+380\\d{9}$")
     private String number;
+    private List<Product> shoppingCart;
 }
