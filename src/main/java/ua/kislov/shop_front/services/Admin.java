@@ -15,10 +15,10 @@ import ua.kislov.shop_front.models.ShopClient;
 import ua.kislov.shop_front.models.ShopOrder;
 import ua.kislov.shop_front.repositiries.AdminShopFeign;
 import ua.kislov.shop_front.repositiries.AdminUserFeign;
-import ua.kislov.shop_front.services.interfaces.AdminServiceInterface;
+import ua.kislov.shop_front.services.interfaces.AdminInterface;
 
 @Service
-public class AdminService implements AdminServiceInterface {
+public class Admin implements AdminInterface {
 
     private final AdminUserFeign adminUserFeign;
     private final AdminShopFeign adminShopFeign;
@@ -26,7 +26,7 @@ public class AdminService implements AdminServiceInterface {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public AdminService(AdminUserFeign adminUserFeign, AdminShopFeign adminShopFeign, ModelMapper mapper, ObjectMapper objectMapper) {
+    public Admin(AdminUserFeign adminUserFeign, AdminShopFeign adminShopFeign, ModelMapper mapper, ObjectMapper objectMapper) {
         this.adminUserFeign = adminUserFeign;
         this.adminShopFeign = adminShopFeign;
         this.mapper = mapper;
@@ -78,6 +78,11 @@ public class AdminService implements AdminServiceInterface {
     @Override
     public void completedOrder(long id) {
         adminShopFeign.completedOrder(id);
+    }
+
+    @Override
+    public void deleteProduct(long id) {
+        adminShopFeign.deleteProduct(id);
     }
 
     private SecurityShopClient fromDTOForSecurityShopClient(SecurityShopClientDTO dto){

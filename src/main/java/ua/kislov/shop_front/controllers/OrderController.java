@@ -29,6 +29,6 @@ public class OrderController {
 
     @GetMapping("/order")
     public String successfulOrder() {
-        return "/shop/order";
+        return "shop/successfulOrder";
     }
 }

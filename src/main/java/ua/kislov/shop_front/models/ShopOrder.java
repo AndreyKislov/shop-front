@@ -19,7 +19,7 @@ public class ShopOrder {
 
     public int getTotalCost(){
         if(!orderProductsList.isEmpty()){
-            return orderProductsList.stream().mapToInt(p-> p.getProduct().getCost()).sum();
+            return orderProductsList.stream().mapToInt(p-> p.getQuantity() * p.getProduct().getCost()).sum();
         }
         return 0;
     }

@@ -14,6 +14,7 @@ import ua.kislov.shop_front.security.details.ClientDetails;
 import ua.kislov.shop_front.services.ClientService;
 import ua.kislov.shop_front.services.ProductService;
 
+import java.security.Principal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,7 +56,10 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public String product(@PathVariable("id") long id, Model model) {
+        ClientDetails clientDetails = (ClientDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String role = clientDetails.securityShopClient().getRole();
         model.addAttribute("product", productService.getProduct(id));
+        model.addAttribute("role", role);
         return "shop/product";
     }
 

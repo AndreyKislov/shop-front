@@ -54,11 +54,13 @@
 <table>
     <tr>
         <th>Product Name</th>
+        <th>Quantity</th>
         <th>Price</th>
     </tr>
-    <tr th:each="product : ${order.orderProductsList}">
-        <td th:text="${product.product.name}"></td>
-        <td th:text="${product.product.cost}"></td>
+    <tr th:each="order_product : ${order.orderProductsList}">
+        <td th:text="${order_product.product.name}"></td>
+        <td th:text="${order_product.getQuantity()}"></td>
+        <td th:text="${order_product.product.cost}"></td>
     </tr>
 </table>
 

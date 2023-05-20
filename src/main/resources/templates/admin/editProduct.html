@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 5px;
+        }
+
+        input[type="file"] {
+            margin-top: 5px;
+        }
+
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 8px 20px;
+            background-color: #337ab7;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<form th:action="@{/admin/edit_product/{id} (id=${product.getId()})}" enctype="multipart/form-data" th:method="PATCH" th:object="${product}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" th:field="*{name}">
+    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    <br>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" th:field="*{description}"></textarea>
+    <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+    <br>
+    <label for="cost">Cost:</label>
+    <input type="text" id="cost" name="cost" th:field="*{cost}">
+    <div class="error" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"></div>
+    <br>
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" size="5000000">
+    <div class="error" th:if="${#fields.hasErrors('byteImage')}" th:errors="*{byteImage}"></div>
+    <br>
+    <input type="submit" value="Save Product">
+</form>
+</body>
+</html>

@@ -37,4 +37,7 @@ public interface AdminShopFeign {
 
     @PostMapping("/admin/order")
     ResponseEntity<Void> completedOrder(@RequestParam("id") long id);
+
+    @PostMapping("/admin/delete-product")
+    ResponseEntity<Void> deleteProduct(@RequestParam("id") long id);
 }

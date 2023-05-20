@@ -35,7 +35,6 @@ public class ShopClientController {
     @PostMapping("/additionalInformation")
     public String createAdditionalInformation(@ModelAttribute("shopClient") @Valid ShopClient shopClient,
                                               BindingResult bindingResult) {
-        System.out.println("from contr");
         if (bindingResult.hasErrors())
             return "auth/additionalInformation";
         emailValidator.validate(shopClient, bindingResult);

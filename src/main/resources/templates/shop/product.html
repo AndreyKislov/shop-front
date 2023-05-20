@@ -65,7 +65,7 @@
 </head>
 <body>
 <div class="product">
-    <img th:src="@{|${product.getUrl()}|}" alt="Product Image">
+    <img th:src="@{'data:image/png;base64,' + ${product.convertToBase64()}}" alt="Image" />
     <h2 th:text="${product.getName()}"></h2>
     <p th:text="${product.getDescription()}"></p>
     <p class="cost" th:text="'Price: $' + ${product.getCost()}"></p>
@@ -73,5 +73,12 @@
         <input type="submit" value="Add to cart">
     </form>
 </div>
+<form th:if="${role == 'ROLE_ADMIN'}" th:action="@{/admin/{id}/edit_product (id=${product.getId()})}" th:method="GET">
+    <input type="submit" value="Edit">
+</form>
+<form th:if="${role == 'ROLE_ADMIN'}" th:action="@{/admin/{id}/delete_product (id=${product.getId()})}" th:method="DELETE">
+    <input type="submit" value="Delete">
+</form>
+
 </body>
 </html>

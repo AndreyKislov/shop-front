@@ -32,6 +32,7 @@
             margin-bottom: 30px;
             margin-left: 150px;
         }
+
         /* стили для контейнера */
         body {
             font-family: Arial, sans-serif;
@@ -130,6 +131,7 @@
             background-color: #007bff;
             color: #fff;
         }
+
         .card {
             background-color: #F2F2F9;
             border: 1px solid #ccc;
@@ -195,6 +197,7 @@
             border-radius: 34px;
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         }
+
         .cart {
             position: absolute;
             top: 20px;
@@ -225,7 +228,7 @@
     </style>
 </head>
 <body>
-<form  th:method="POST" th:action="@{/logout}">
+<form th:method="POST" th:action="@{/logout}">
     <input type="submit" value="Logout">
 </form>
 <form class="cart" th:action="@{/catalog/cart}" th:method="GET">
@@ -235,7 +238,8 @@
 <div class="row">
     <div th:each="product : ${catalog}" class="col-md-4 mb-3">
         <div class="card">
-            <img th:src="@{|${product.getUrl()}|}" class="card-img-top" alt="...">
+            <img th:src="@{'data:image/png;base64,' + ${product.convertToBase64()}}" class="card-img-top" alt="Image"/>
+
             <div class="card-body" style="display: inline">
                 <h5 class="card-title" th:text="${product.getName()}"></h5>
                 <p class="card-text" th:text="'price  ' + ${product.getCost()}"></p>

@@ -8,7 +8,7 @@ import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.models.ShopClient;
 import ua.kislov.shop_front.models.ShopOrder;
 
-public interface AdminServiceInterface {
+public interface AdminInterface {
     SecurityShopClientListDTO findSecurityShopClientByAll(int page, int size, String sort);
 
     SecurityShopClient findSecurityShopClientById(long id);
@@ -26,5 +26,7 @@ public interface AdminServiceInterface {
     ShopOrder getOrder(long id);
 
     void completedOrder(long id);
+
+    void deleteProduct(long id);
 
 }

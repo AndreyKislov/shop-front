@@ -46,7 +46,7 @@ public class SecurityConfig {
                             Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
                             System.out.println(roles);
                             if (roles.contains("ROLE_ADMIN")) {
-                                response.sendRedirect("/admin/users");
+                                response.sendRedirect("/admin/main");
                             } else if (roles.contains("ROLE_USER")) {
                                 response.sendRedirect("/shop/checkPage");
                             }

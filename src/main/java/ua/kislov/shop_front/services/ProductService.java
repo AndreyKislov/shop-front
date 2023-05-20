@@ -9,7 +9,7 @@ import ua.kislov.shop_front.models.Product;
 import ua.kislov.shop_front.repositiries.ShopFeign;
 
 @Service
-public class ProductService {
+public class ProductService implements ua.kislov.shop_front.services.interfaces.ProductInterface {
     private final ShopFeign shopFeign;
 
     @Autowired
@@ -17,20 +17,25 @@ public class ProductService {
         this.shopFeign = shopFeign;
     }
 
+    @Override
     public Product getProduct(long id){
         return shopFeign.product(id).getBody();
     }
+    @Override
     public ProductListDTO productFindAll(int page, int size, String sortBy) {
         return shopFeign.products(page, size, sortBy).getBody();
     }
+    @Override
     public void addToCart(long clientId, long productId){
         shopFeign.addToCart(new CartItemsDTO(productId, clientId));
 
     }
+    @Override
     public void updateQuantity(UpdateQuantityDTO dto){
         shopFeign.updateQuantity(dto);
     }
 
+    @Override
     public void deleteFromCart(CartItemsDTO dto){
          shopFeign.deleteFromCart(dto);
     }

@@ -27,7 +27,6 @@ public class RegistrationService {
 
     public void save(SecurityShopClient securityShopClient) {
         securityShopClient.setPassword(encoder.encode(securityShopClient.getPassword()));
-        System.out.println(securityShopClient.getPassword());
         securityShopClient.setRole("ROLE_USER");
         securityFeignClient.save(securityShopClient);
     }

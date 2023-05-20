@@ -3,6 +3,7 @@ package ua.kislov.shop_front.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,16 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import ua.kislov.shop_front.dto.OrdersDTO;
-import ua.kislov.shop_front.dto.ProductListDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientDTO;
 import ua.kislov.shop_front.dto.SecurityShopClientListDTO;
 import ua.kislov.shop_front.models.Product;
 import ua.kislov.shop_front.models.SecurityShopClient;
 import ua.kislov.shop_front.models.ShopOrder;
-import ua.kislov.shop_front.services.interfaces.AdminServiceInterface;
-import ua.kislov.shop_front.validators.ProductValidate;
+import ua.kislov.shop_front.services.interfaces.AdminInterface;
+import ua.kislov.shop_front.services.interfaces.ProductInterface;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,15 +30,21 @@ import java.util.stream.IntStream;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final AdminServiceInterface adminService;
+    private final AdminInterface adminService;
+
+    private final ProductInterface productService;
     private final ModelMapper mapper;
-    private final ProductValidate productValidate;
 
     @Autowired
-    public AdminController(AdminServiceInterface adminService, ModelMapper mapper, ProductValidate productValidate) {
+    public AdminController(AdminInterface adminService, ProductInterface productService, ModelMapper mapper) {
         this.adminService = adminService;
+        this.productService = productService;
         this.mapper = mapper;
-        this.productValidate = productValidate;
+    }
+
+    @GetMapping("/main")
+    public String mainPage(){
+        return "admin/main";
     }
 
     @GetMapping("/users")
@@ -111,26 +116,40 @@ public class AdminController {
                                 @RequestParam("image") MultipartFile image) throws IOException {
         if (bindingResult.hasErrors())
             return "admin/newProduct";
-
-        File file = new File("G:\\download\\" + image.getOriginalFilename());
         if (!image.isEmpty()) {
-            String filename = image.getOriginalFilename();
-            if (filename != null && (!filename.endsWith(".jpg") || !filename.endsWith(".png")) && file.exists()) {
-                bindingResult.rejectValue("url", "", "Invalid file format " +
-                        "or image with that name is exists");
-                return "admin/newProduct";
-            }
+            byte[] byteImage = image.getBytes();
+            product.setByteImage(byteImage);
         } else {
-            bindingResult.rejectValue("url", "", "Image is empty");
+            bindingResult.rejectValue("byteImage", "", "Image is empty");
             return "admin/newProduct";
         }
-        productValidate.validate(product, bindingResult);
-        if (bindingResult.hasErrors())
-            return "admin/newProduct";
-        image.transferTo(file);
-        product.setUrl(file.getPath());
         adminService.saveNewProduct(product);
         return "redirect:/admin/create_product";
+    }
+
+    @GetMapping("/{id}/edit_product")
+    public String getEditProduct(@PathVariable("id") long id, Model model){
+         model.addAttribute("product", productService.getProduct(id));
+         return "admin/editProduct";
+    }
+    @PatchMapping("/edit_product/{id}")
+    public String editProduct(@PathVariable("id")long id,
+                              @ModelAttribute("product") @Valid Product product,
+                              BindingResult bindingResult, @RequestParam("image") MultipartFile image) throws IOException {
+        if(image.isEmpty())
+            bindingResult.rejectValue("byteImage", "", "Image is empty");
+        if(bindingResult.hasErrors())
+            return "admin/editProduct";
+        byte[] byteImage = image.getBytes();
+        product.setByteImage(byteImage);
+        product.setId(id);
+        adminService.saveNewProduct(product);
+        return "redirect:/catalog";
+    }
+    @DeleteMapping("/{id}/delete_product")
+    public String deleteProduct(@PathVariable("id")long id){
+        adminService.deleteProduct(id);
+        return "redirect:/catalog";
     }
 
     @GetMapping("/orders")
@@ -141,14 +160,14 @@ public class AdminController {
     }
 
     @GetMapping("/order/{id}")
-    public String order(@PathVariable("id") long id, Model model){
+    public String order(@PathVariable("id") long id, Model model) {
         ShopOrder shopOrder = adminService.getOrder(id);
         model.addAttribute("order", shopOrder);
         return "admin/order";
     }
 
     @PatchMapping("/order/{id}")
-    public String order(@PathVariable("id")long id){
+    public String order(@PathVariable("id") long id) {
         adminService.completedOrder(id);
         return "redirect:/admin/orders";
     }
