@@ -1,0 +1,7 @@
+jwt.secret-string=
+auth-reg-service.url=
+shop_back.url=
+spring.application.name=
+server.port=
+spring.mvc.hiddenmethod.filter.enabled=
+spring.main.allow-bean-definition-overriding=
